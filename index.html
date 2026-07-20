@@ -1,11 +1,164 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>My First Page</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>TuklasMauban Map</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+}
+
+#map{
+    height:100vh;
+    width:100%;
+}
+
+#backBtn{
+    position:absolute;
+    top:15px;
+    left:15px;
+    z-index:1000;
+    padding:10px 15px;
+    border:none;
+    border-radius:8px;
+    background:#007bff;
+    color:white;
+    cursor:pointer;
+}
+
+#backBtn:hover{
+    background:#0056b3;
+}
+
+.popup-img{
+    width:200px;
+    border-radius:10px;
+}
+</style>
 </head>
+
 <body>
-  <h1>Hi, Mauban</h1>
-  <p>This is my first website.</p>
+
+<button id="backBtn">⬅ Back to Mauban</button>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+// Mauban center
+const maubanCenter = [14.1918, 121.7305];
+
+const map = L.map('map').setView(maubanCenter, 12);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© OpenStreetMap'
+}).addTo(map);
+
+// ---------------------
+// Barangay Markers
+// ---------------------
+
+const cagsiay = L.marker([14.185,121.760]).addTo(map)
+.bindPopup("<b>Barangay Liwayway</b><br>Click marker to explore.");
+
+const liwayway = L.marker([14.120,121.720]).addTo(map)
+.bindPopup("<b>Barangay Cagsiay</b><br>Click marker to explore.");
+// Tourism Layers
+
+const liwaywayLayer =L.layerGroup();
+const cagsiayLayer = L.layerGroup(); 
+
+// ---------------------
+// Liwayway Destinations
+// ---------------------
+
+L.marker([14.186,121.764])
+.bindPopup(`
+<h3>Ladines Resort</h3>
+<img class="popup-img"
+src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e">
+<p>Beautiful beach resort in Liwayway.</p>
+`)
+.addTo(liwaywayLayer);
+
+L.marker([14.183,121.758])
+.bindPopup(`
+<h3>Liwayway Cafe</h3>
+<img class="popup-img"
+src="https://images.unsplash.com/photo-1509042239860-f550ce710b93">
+<p>Popular café with scenic views.</p>
+`)
+.addTo(liwaywayLayer);
+
+// ---------------------
+// Cagsiay Destinations
+// ---------------------
+
+L.marker([14.122,121.721])
+.bindPopup(`
+<h3>Cagsiay Seafood Restaurant</h3>
+<img class="popup-img"
+src="https://images.unsplash.com/photo-1559339352-11d035aa65de">
+<p>Fresh seafood specialties.</p>
+`)
+.addTo(cagsiayLayer);
+
+L.marker([14.118,121.724])
+.bindPopup(`
+<h3>Cagsiay View Deck</h3>
+<img class="popup-img"
+src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee">
+<p>Panoramic view of Mauban.</p>
+`)
+.addTo(cagsiayLayer);
+
+// ---------------------
+// Click Barangay
+// ---------------------
+
+liwayway.on('click', function(){
+
+    map.flyTo([14.185,121.760],16,{
+        duration:2
+    });
+
+    map.removeLayer(cagsiayLayer);
+    map.addLayer(liwaywayLayer);
+});
+
+cagsiay.on('click', function(){
+
+    map.flyTo([14.120,121.720],16,{
+        duration:2
+    });
+
+    map.removeLayer(liwaywayLayer);
+    map.addLayer(cagsiayLayer);
+});
+
+// ---------------------
+// Back Button
+// ---------------------
+
+document.getElementById("backBtn").addEventListener("click",function(){
+
+    map.flyTo(maubanCenter,12,{
+        duration:2
+    });
+
+    map.removeLayer(liwaywayLayer);
+    map.removeLayer(cagsiayLayer);
+});
+
+</script>
+
 </body>
 </html>
