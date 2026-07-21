@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -172,4 +171,196 @@
     border-radius:16px;
     padding:16px;
     margin-top:14px;
-    font-size
+    font-size:13.5px;
+    color:#5a5347;
+    line-height:1.5;
+  }
+
+  footer{ text-align:center; padding:26px 10px 40px; font-size:12px; color:#a89f8f; }
+
+  .hidden{ display:none !important; }
+
+  @media (prefers-reduced-motion: reduce){
+    .cat-card, .place-card, .directions-btn{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="backBtn" id="backBtn" aria-label="Go back">←</button>
+  <div class="titles">
+    <div class="brand" id="headerTitle">Saan Tayo?</div>
+    <div class="sub" id="headerSub">Mauban, Quezon — hanapin natin</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- SCREEN 1: CATEGORIES -->
+  <section id="screen-categories">
+    <div class="intro">
+      <h2>Ano ang gusto mong puntahan?</h2>
+      <p>Pumili ng kategorya para makita ang mga lugar sa paligid mo.</p>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+  </section>
+
+  <!-- SCREEN 2: LISTINGS -->
+  <section id="screen-listings" class="hidden">
+    <div class="list-head">
+      <div class="eyebrow" id="listEyebrow">Kategorya</div>
+      <h2 id="listTitle">Mga Resort</h2>
+    </div>
+    <div id="listContainer"></div>
+  </section>
+
+  <!-- SCREEN 3: MAP / DETAIL -->
+  <section id="screen-map" class="hidden">
+    <div class="map-head">
+      <h2 id="mapTitle">Place name</h2>
+      <div class="addr" id="mapAddr">Address here</div>
+    </div>
+    <div class="map-frame">
+      <iframe id="mapIframe" src="" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <a class="directions-btn" id="directionsLink" href="#" target="_blank" rel="noopener">
+      📍 I-google Maps ang Direksyon
+    </a>
+    <div class="place-detail" id="placeDetail"></div>
+  </section>
+
+</main>
+
+<footer>Sample data lang ito — palitan ng aktwal na mga negosyo, address, at coordinates.</footer>
+
+<script>
+/* ===========================================================
+   DATA — replace with your real businesses.
+   lat/lng: right-click the exact spot on Google Maps → the
+   numbers that pop up at the top are the lat,lng to paste here.
+   =========================================================== */
+const CATEGORIES = [
+  { id:'resort',  name:'Resort',       emoji:'🏖️' },
+  { id:'cafe',    name:"Cafe's",       emoji:'☕' },
+  { id:'parlor',  name:'Parlor',       emoji:'💇‍♀️' },
+  { id:'barber',  name:'Barber Shop',  emoji:'💈' },
+  { id:'market',  name:'Food Market',  emoji:'🥭' },
+];
+
+const PLACES = [
+  { id:1, cat:'resort', name:'Liwayway Beach Resort', addr:'Brgy. Liwayway, Mauban, Quezon', tags:['Swimming','Cottages'], lat:14.1930, lng:122.1830, desc:'Cottages fronting the bay, open daily 7AM–7PM. Good for family day outings.' },
+  { id:2, cat:'resort', name:'Kanluran Sunset Resort', addr:'Brgy. Kanluran, Mauban, Quezon', tags:['Beachfront','Events'], lat:14.1875, lng:122.1790, desc:'Popular for sunset views and small gatherings.' },
+  { id:3, cat:'cafe', name:'Bayside Brew Cafe', addr:'Rizal St., Poblacion, Mauban, Quezon', tags:['Coffee','WiFi'], lat:14.1898, lng:122.1888, desc:'Cozy spot near the town plaza with decent WiFi for work.' },
+  { id:4, cat:'cafe', name:'Kape Kubo', addr:'Brgy. Cagsiay I, Mauban, Quezon', tags:['Local coffee'], lat:14.1954, lng:122.1795, desc:'Traditional kapeng barako served native-style.' },
+  { id:5, cat:'parlor', name:"Bella's Beauty Parlor", addr:'Quezon Ave., Mauban, Quezon', tags:['Hair','Nails'], lat:14.1902, lng:122.1867, desc:'Walk-ins welcome, closed Sundays.' },
+  { id:6, cat:'barber', name:'Mang Tony Barbershop', addr:'National Highway, Mauban, Quezon', tags:['Haircut','Shave'], lat:14.1889, lng:122.1901, desc:'Classic barbershop, cash only.' },
+  { id:7, cat:'barber', name:'Fade Masters', addr:'Brgy. Zone II, Mauban, Quezon', tags:['Fades','Kids cuts'], lat:14.1918, lng:122.1852, desc:'Modern fades, appointment recommended on weekends.' },
+  { id:8, cat:'market', name:'Mauban Public Market', addr:'Poblacion, Mauban, Quezon', tags:['Fresh produce','Seafood'], lat:14.1901, lng:122.1876, desc:'Main wet and dry market, busiest early morning.' },
+  { id:9, cat:'market', name:'Talipapa sa Cagsiay', addr:'Brgy. Cagsiay II, Mauban, Quezon', tags:['Vegetables','Fish'], lat:14.1962, lng:122.1811, desc:'Smaller neighborhood market, afternoons only.' },
+];
+
+/* ============ rendering ============ */
+const screens = {
+  categories: document.getElementById('screen-categories'),
+  listings: document.getElementById('screen-listings'),
+  map: document.getElementById('screen-map'),
+};
+const headerTitle = document.getElementById('headerTitle');
+const headerSub = document.getElementById('headerSub');
+const backBtn = document.getElementById('backBtn');
+
+let currentCategory = null;
+
+function showScreen(name){
+  Object.values(screens).forEach(s => s.classList.add('hidden'));
+  screens[name].classList.remove('hidden');
+  backBtn.classList.toggle('show', name !== 'categories');
+}
+
+function renderCategories(){
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const count = PLACES.filter(p => p.cat === cat.id).length;
+    const card = document.createElement('div');
+    card.className = 'cat-card';
+    card.tabIndex = 0;
+    card.innerHTML = `
+      <div class="emoji">${cat.emoji}</div>
+      <div class="name">${cat.name}</div>
+      <div class="count">${count} lugar</div>
+    `;
+    card.addEventListener('click', () => openCategory(cat));
+    card.addEventListener('keydown', e => { if(e.key==='Enter') openCategory(cat); });
+    grid.appendChild(card);
+  });
+}
+
+function openCategory(cat){
+  currentCategory = cat;
+  headerTitle.textContent = cat.name;
+  headerSub.textContent = 'Piliin ang lugar';
+  document.getElementById('listEyebrow').textContent = 'Kategorya';
+  document.getElementById('listTitle').textContent = 'Mga ' + cat.name;
+
+  const container = document.getElementById('listContainer');
+  const items = PLACES.filter(p => p.cat === cat.id);
+  container.innerHTML = '';
+
+  if(items.length === 0){
+    container.innerHTML = `<div class="empty">Wala pang naka-listang ${cat.name.toLowerCase()} dito. Idagdag mo sa PLACES array sa code.</div>`;
+  } else {
+    items.forEach(place => {
+      const card = document.createElement('div');
+      card.className = 'place-card';
+      card.tabIndex = 0;
+      card.innerHTML = `
+        <div class="thumb">${cat.emoji}</div>
+        <div class="info">
+          <h3>${place.name}</h3>
+          <div class="addr">${place.addr}</div>
+          <div class="tags">${place.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        </div>
+        <div class="arrow">›</div>
+      `;
+      card.addEventListener('click', () => openPlace(place));
+      card.addEventListener('keydown', e => { if(e.key==='Enter') openPlace(place); });
+      container.appendChild(card);
+    });
+  }
+  showScreen('listings');
+}
+
+function openPlace(place){
+  headerTitle.textContent = place.name;
+  headerSub.textContent = 'Lokasyon';
+
+  document.getElementById('mapTitle').textContent = place.name;
+  document.getElementById('mapAddr').textContent = place.addr;
+  document.getElementById('placeDetail').textContent = place.desc;
+
+  const iframe = document.getElementById('mapIframe');
+  iframe.src = `https://www.google.com/maps?q=${place.lat},${place.lng}&hl=en&z=16&output=embed`;
+
+  const link = document.getElementById('directionsLink');
+  link.href = `https://www.google.com/maps/dir/?api=1&destination=${place.lat},${place.lng}`;
+
+  showScreen('map');
+}
+
+backBtn.addEventListener('click', () => {
+  if(!screens.map.classList.contains('hidden')){
+    openCategory(currentCategory);
+  } else {
+    headerTitle.textContent = 'Saan Tayo?';
+    headerSub.textContent = 'Mauban, Quezon — hanapin natin';
+    showScreen('categories');
+  }
+});
+
+renderCategories();
+showScreen('categories');
+</script>
+</body>
+</html>
