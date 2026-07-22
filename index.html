@@ -609,14 +609,13 @@ function openCategory(cat){
         </div>
         <div class="arrow">›</div>
       `;
-      card.addEventListener('click', () => openPlace(place){
+      card.addEventListener('click', () => openPlace(place));
       card.addEventListener('keydown', e => { if(e.key==='Enter') openPlace(place); });
       container.appendChild(card);
     });
   }
   showScreen('listings');
-  }
-
+}
   function openPlace(place){
   headerSub.textContent = 'Lokasyon';
 
@@ -662,4 +661,3 @@ goHero();
 </script>
 </body>
 </html>
-  
