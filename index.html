@@ -609,4 +609,57 @@ function openCategory(cat){
         </div>
         <div class="arrow">›</div>
       `;
-      card.addEventListener('click', () => openPla
+      card.addEventListener('click', () => openPlace(place){
+      card.addEventListener('keydown', e => { if(e.key==='Enter') openPlace(place); });
+      container.appendChild(card);
+    });
+  }
+  showScreen('listings');
+  }
+
+  function openPlace(place){
+  headerSub.textContent = 'Lokasyon';
+
+  document.getElementById('mapTitle').textContent = place.name;
+  document.getElementById('mapAddr').textContent = place.addr;
+  document.getElementById('placeDetail').textContent = place.desc;
+
+  const iframe = document.getElementById('mapIframe');
+  iframe.src = `https://www.google.com/maps?q=${place.lat},${place.lng}&hl=en&z=16&output=embed`;
+
+  const link = document.getElementById('directionsLink');
+  link.href = `https://www.google.com/maps/dir/?api=1&destination=${place.lat},${place.lng}`;
+
+  renderRatingWidget(place);
+  showScreen('map')
+  }
+  document.getElementById('exploreBtn').addEventListener('click', () => {
+  renderCategories();
+  goCategories();
+});
+
+backBtn.addEventListener('click', () => {
+  if(!screens.map.classList.contains('hidden')){
+    openCategory(currentCategory);
+  } else if(!screens.listings.classList.contains('hidden')){
+    goCategories();
+  } else {
+    goHero();
+  }
+});
+
+menuBtn.addEventListener('click', () => {
+  menuDropdown.classList.toggle('hidden');
+});
+document.getElementById('menuHome').addEventListener('click', goHero);
+document.getElementById('menuCategories').addEventListener('click', () => {
+  renderCategories();
+  goCategories();
+});
+
+renderCategories();
+goHero();
+</script>
+</body>
+</html>
+  
