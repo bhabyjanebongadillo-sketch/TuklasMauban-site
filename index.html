@@ -119,27 +119,21 @@
     color:#fff;
     text-align:center;
     overflow:hidden;
+    /* Photo background: swap the URL below for your own hero photo
+       (e.g. a wide shot of Mauban's coastline / Lamon Bay). The
+       gradient on top keeps the text readable over any photo. */
     background:
-      radial-gradient(circle at 20% 15%, rgba(255,182,39,.35), transparent 45%),
-      radial-gradient(circle at 85% 80%, rgba(244,91,105,.35), transparent 50%),
-      linear-gradient(180deg, #1a7fa3 0%, #0B4F6C 55%, #083849 100%);
-  }
-  .hero::before{
-    content:"";
-    position:absolute;
-    left:0; right:0; bottom:0;
-    height:38%;
-    background:
-      linear-gradient(180deg, rgba(20,110,80,0) 0%, rgba(20,92,66,.85) 55%, rgba(13,70,50,.95) 100%);
+      linear-gradient(180deg, rgba(8,40,55,.45) 0%, rgba(8,56,73,.55) 45%, rgba(8,56,73,.9) 100%),
+      url('https://picsum.photos/seed/mauban-hero-bay/900/1300') center/cover no-repeat;
   }
   .hero::after{
     content:"";
     position:absolute;
     left:-10%; right:-10%; bottom:-6%;
-    height:22%;
+    height:16%;
     background:#0d4632;
     border-radius:50% 50% 0 0 / 100% 100% 0 0;
-    opacity:.9;
+    opacity:.85;
   }
   .hero-content{ position:relative; z-index:2; }
   .hero-emoji{
@@ -185,44 +179,64 @@
   }
   .hero-btn:active{ transform:translateY(3px); box-shadow:0 2px 0 #c98a10; }
 
-  /* ===== CATEGORIES ===== */
-  .intro{ margin-bottom:18px; }
+  /* ===== CATEGORIES (photo cards, like the reference screenshot) ===== */
+  .intro{ margin-bottom:22px; }
   .intro h2{ font-size:22px; color:var(--ocean-dark); margin-bottom:4px; }
   .intro p{ font-size:14px; color:#5a5347; }
 
   .cat-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px;
-  }
-  .cat-card{
-    background:#fff;
-    border:2px solid var(--line);
-    border-radius:18px;
-    padding:20px 14px;
-    text-align:center;
-    cursor:pointer;
-    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
     display:flex;
     flex-direction:column;
-    align-items:center;
-    gap:8px;
+    gap:16px;
+  }
+  .cat-card{
+    position:relative;
+    height:350px;
+    border-radius:18px;
+    overflow:hidden;
+    cursor:pointer;
+    background-size:cover;
+    background-position:center;
+    box-shadow:0 6px 16px rgba(11,79,108,.18);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .cat-card::before{
+    /* dark fade at the bottom so white text stays legible over any photo */
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,.72) 100%);
   }
   .cat-card:hover, .cat-card:focus-visible{
     transform:translateY(-3px);
-    border-color:var(--mango);
-    box-shadow:0 8px 18px rgba(11,79,108,.12);
+    box-shadow:0 10px 22px rgba(11,79,108,.25);
     outline:none;
   }
-  .cat-card .emoji{
-    width:56px; height:56px;
-    border-radius:50%;
-    background:var(--cream);
-    display:flex; align-items:center; justify-content:center;
-    font-size:26px;
+  .cat-card .cat-label{
+    position:absolute;
+    left:16px; right:16px; bottom:12px;
+    z-index:2;
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:8px;
   }
-  .cat-card .name{ font-weight:700; font-size:15px; color:var(--ocean-dark); }
-  .cat-card .count{ font-size:12px; color:#8a8175; }
+  .cat-card .cat-label .name{
+    color:#fff;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size:20px;
+    text-shadow:0 2px 6px rgba(0,0,0,.5);
+  }
+  .cat-card .cat-label .count{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:11.5px;
+    color:#fff;
+    background:rgba(0,0,0,.4);
+    padding:3px 9px;
+    border-radius:99px;
+    white-space:nowrap;
+  }
 
   .list-head{ margin-bottom:14px; }
   .list-head .eyebrow{ font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--coral); font-weight:700; }
@@ -230,10 +244,10 @@
 
   .place-card{
     background:#fff;
-    border:1px solid var(--line);
-    border-radius:16px;
-    padding:16px;
-    margin-bottom:12px;
+    border:2px solid var(--line);
+    border-radius:22px;
+    padding:22px;
+    margin-bottom:18px;
     display:flex;
     gap:14px;
     align-items:center;
@@ -246,15 +260,15 @@
     outline:none;
   }
   .place-card .thumb{
-    width:52px; height:52px; border-radius:12px;
+    width:150px; height:150px; border-radius:15px;
     background:var(--ocean);
     color:#fff; display:flex; align-items:center; justify-content:center;
-    font-size:22px; flex-shrink:0;
+    font-size:100px; flex-shrink:0;
   }
   .place-card .info{ flex:1; min-width:0; }
-  .place-card .info h3{ font-size:16px; color:var(--ink); }
-  .place-card .info .addr{ font-size:13px; color:#8a8175; margin-top:2px; }
-  .place-card .info .tags{ margin-top:6px; display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+  .place-card .info h3{ font-size:22px; color:var(--ink); }
+  .place-card .info .addr{ font-size:16px; color:#8a8175; margin-top:2px; }
+  .place-card .info .tags{ margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
   .place-card .tag{
     font-size:11px; background:var(--cream); border:1px solid var(--line);
     padding:2px 8px; border-radius:99px; color:var(--ocean-dark); font-weight:600;
@@ -447,24 +461,36 @@
    DATA — replace with your real businesses.
    lat/lng: right-click the exact spot on Google Maps → the
    numbers that pop up at the top are the lat,lng to paste here.
+
+   img: the photo shown on the category card. Right now these
+   point to random stock placeholder photos (picsum.photos) just
+   so you can see the new photo-card layout in action. To use
+   your own photos:
+     1. Upload your photo somewhere public (e.g. imgur.com,
+        your own site, or a Google Drive "anyone with the link"
+        share converted to a direct image URL).
+     2. Paste that direct image URL into the `img` field below.
    =========================================================== */
 const CATEGORIES = [
-  { id:'resort',  name:'Resort',       emoji:'🏖️' },
-  { id:'cafe',    name:"Cafe's",       emoji:'☕' },
-  { id:'parlor',  name:'Parlor',       emoji:'💇‍♀️' },
-  { id:'barber',  name:'Barber Shop',  emoji:'💈' },
-  { id:'market',  name:'Food Market',  emoji:'🥭' },
+  { id:'resort',  name:'Water Attractions',       emoji:'🏖️', img:'https://scontent.fmnl12-1.fna.fbcdn.net/v/t39.30808-6/756661826_1478567471032469_4606569422330330171_n.jpg?stp=dst-jpg_tt6&cstp=mx700x500&ctp=s700x500&_nc_cat=109&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeEC6YHJlDFzkgV1i4j-jegLe07xa0xTDBp7TvFrTFMMGpDyvXHb4iWKYTsohmVnNpu2miEZYE07YQ6tRpWPu80T&_nc_ohc=iRt_8yEnG0YQ7kNvwF05r8V&_nc_oc=AdoijYVhbODBPhfdGD9e-oql2ZKbdRM_AMhHlPhfuP1WIMGumcUlMO4V6N6GW8T7PPc&_nc_pt=1&_nc_zt=23&_nc_ht=scontent.fmnl12-1.fna&_nc_gid=cvu0j9kBnq5CMGNmF3l9Sw&_nc_ss=7b2a8&oh=00_AQBe2M8XkDAJdezOanpPANHXe-BBIlN39yk4V3E90tq2fw&oe=6A6A6D7B' },
+  { id:'cafe',    name:"Cafe's",       emoji:'☕', img:'https://picsum.photos/seed/mauban-cafe/700/500' },
+  { id:'parlor',  name:'Parlor',       emoji:'💇‍♀️', img:'https://picsum.photos/seed/mauban-parlor/700/500' },
+  { id:'barber',  name:'Barber Shop',  emoji:'💈', img:'https://picsum.photos/seed/mauban-barber/700/500' },
+  { id:'market',  name:'Food Market',  emoji:'🥭', img:'https://picsum.photos/seed/mauban-market/700/500' },
 ];
 
 const PLACES = [
   { id:1, cat:'resort', name:'Liwayway Sono Benedetto Resort', addr:'Sitio MapuputiBrgy. Liwayway, Mauban, Quezon', tags:['Swimming','Cottages'], lat:14.1099026,lng:121.6852639, desc:'Cottages fronting the bay, open daily 7AM–7PM. Good for family day outings.' },
-  { id:3, cat:'resort', name:'La Pavielle Resort & Event Place', addr:'Sitio Ilaya Brgy. Polo, Mauban, Quezon', tags:['Swimming','Cottages'], lat:14.1798637, lng:121.7082019, desc:'A priemeir function and recreation venue.' },
-  { id:4, cat:'market', name:'Hello Halo', addr:'Sitio Ilaya Brgy. Polo, Mauban, Quezon', tags:['Food', 'Dessert'], lat:14.1800183, lng:121.7108225, desc:'A charming, breezy palayan (native-style stand) known for its signature hearty meals and creamy, overload shaved-iced desserts. Operating daily from 9:00 AM–8:00 PM.' },
-  { id:5, cat:'cafe', name:"Coffe SPot", addr:'Sitio Pilaway Brgy Polo, Mauban, Quezon', tags:['Local coffee'], lat:14.1769283, lng:121.7228335, desc:'A cozy resort-style cafe known for its chill vibes and relaxing atmosphere.' },
-  { id:6, cat:'resort', name:'Sampitan Beach Resort', addr:'Cagsiay II Mauban, Quezon', tags:['Swimming','Cottages'], lat:14.243243, lng:121.7548436, desc:'A popular, budget-friendly coastal gateway. it features a tranquil coasline perfect for swimming, tent camping, and family outings.' },
-  { id:7, cat:'resort', name:'Aguho Playa', addr:'Cagbalete 1, Mauban, Quezon', tags:['Beach','Relaxation'], lat:14.2575473, lng:121.8188731, desc:'A budget-friendly beachfront retreat located in Cagbalete Island, the property serves as a perfect escape for travelers and backpackers wanting to unplug from city life.' },
-  { id:8, cat:'resort', name:'Alitap Falls', addr:'Brgy ALitap, Mauban, Quezon', tags:['Waterfall'], lat:14.124735, lng:121.7451095, desc:'A hidden forest gem featuring a pristine cascade of crisp, cold water springing over rocky terrain.' },
-  { id:9, cat:'resort', name:'Bisibis Falls', addr:'Brgy. Cagsiay III, Mauban, Quezon', tags:['Waterfall '], lat:14.3291413, lng:121.7211905, desc:'A unique, moderately wide cascade that empites directly into the Pacific Ocean against a backdrop of earth-tone rocks and thick vegetation.' },
+  { id:3, cat:'resort', name:'La Pavielle Resort & Event Place', addr:'Sitio Ilaya Brgy. Polo, Mauban, Quezon', tags:['Swimming','Cottages'], lat:14.1797992, lng:121.710736, desc:'A priemeir function and recreation venue.' },
+  { id:4, cat:'market', name:'Hello Halo', addr:'Sitio Ilaya Brgy. Polo, Mauban, Quezon', tags:['Food', 'Dessert'], lat:14.1797248, lng:121.7133544, desc:'A charming, breezy palayan (native-style stand) known for its signature hearty meals and creamy, overload shaved-iced desserts. Operating daily from 9:00 AM–8:00 PM.' },
+  { id:5, cat:'cafe', name:"Coffe SPot", addr:'Sitio Pilaway Brgy Polo, Mauban, Quezon', tags:['Local coffee'], lat:14.176903, lng:121.7255783, desc:'A cozy resort-style cafe known for its chill vibes and relaxing atmosphere.' },
+  { id:6, cat:'resort', name:'Sampitan Beach Resort', addr:'Cagsiay II Mauban, Quezon', tags:['Swimming','Cottages'], lat:14.2430982, lng:121.7583767, desc:'A popular, budget-friendly coastal gateway. it features a tranquil coasline perfect for swimming, tent camping, and family outings.' },
+  { id:7, cat:'resort', name:'Aguho Playa', addr:'Cagbalete 1, Mauban, Quezon', tags:['Beach','Relaxation'], lat:14.257527, lng:121.8291729, desc:'A budget-friendly beachfront retreat located in Cagbalete Island, the property serves as a perfect escape for travelers and backpackers wanting to unplug from city life.' },
+  { id:8, cat:'resort', name:'Alitap Falls', addr:'Brgy ALitap, Mauban, Quezon', tags:['Waterfall'], lat:14.1247298, lng:121.7476844, desc:'A hidden forest gem featuring a pristine cascade of crisp, cold water springing over rocky terrain.' },
+  { id:9, cat:'resort', name:'Bisibis Falls', addr:'Brgy. Cagsiay III, Mauban, Quezon', tags:['Waterfall '], lat:14.3291361, lng:121.7237654, desc:'A unique, moderately wide cascade that empites directly into the Pacific Ocean against a backdrop of earth-tone rocks and thick vegetation.' },
+  { id:10, cat:'resort', name:'Gat Uban Park', addr:'Enverga Boulevard, Mauban, Quezon', tags:['Hangout Spot'], lat:14.1893783, lng:121.7330779, desc:'features a bronze statue of the town’s legendary Dumagat chieftain and local hero. It is a popular, breezy spot for locals and tourists to relax, enjoy the sea breeze, and watch the sunset.' },
+  { id:11, cat:'market', name:'Joliibee', addr:'Barangay Polo, Mauban, Quezon', tags:['Fast Food, Desserts'], lat:14.1782379, lng:121.7193119, desc:'Maubans very first Jollibee branch — the go-to spot for Chickenjoy, burgers, and the Filipino favorites the whole family loves. A welcome addition for locals and travelers craving a quick, familiar meal while exploring the town.' },
+
 ];
 
 /* ===========================================================
@@ -553,7 +579,7 @@ function showScreen(name){
   backBtn.classList.toggle('show', name !== 'hero');
   menuDropdown.classList.add('hidden');
 }
-
+1
 function goHero(){
   headerSub.textContent = 'Mauban, Quezon — hanapin natin';
   showScreen('hero');
@@ -567,10 +593,12 @@ function renderCategories(){
     const card = document.createElement('div');
     card.className = 'cat-card';
     card.tabIndex = 0;
+    card.style.backgroundImage = `url('${cat.img}')`;
     card.innerHTML = `
-      <div class="emoji">${cat.emoji}</div>
-      <div class="name">${cat.name}</div>
-      <div class="count">${count} lugar</div>
+      <div class="cat-label">
+        <span class="name">${cat.name}</span>
+        <span class="count">${count} lugar</span>
+      </div>
     `;
     card.addEventListener('click', () => openCategory(cat));
     card.addEventListener('keydown', e => { if(e.key==='Enter') openCategory(cat); });
