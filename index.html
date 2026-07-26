@@ -545,7 +545,6 @@
     <div class="brand">TuklasMauban</div>
     <div class="sub" id="headerSub">Mauban, Quezon — hanapin natin</div>
   </div>
-  <button class="loginPill" id="loginPill">👤 Mag-sign in</button>
   <button class="headerBtn" id="menuBtn" aria-label="Menu">☰</button>
 </header>
 
@@ -556,7 +555,7 @@
 </div>
 
 <main>
-
+ <button class="loginPill" id="loginPill">👤 Mag-sign in</button>
   <!-- SCREEN -1: SIGN IN FIRST -->
   <section id="screen-entry">
     <div class="entryWrap">
@@ -692,12 +691,13 @@ import {
    copy the config object it gives you and paste it below.
    ========================================================= */
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDIhYE89-67cpH_SeU9wP_rvbRPH3Ossl8",
+  authDomain: "tuklasmauban-bcn.firebaseapp.com",
+  projectId: "tuklasmauban-bcn",
+  storageBucket:  "tuklasmauban-bcn.firebasestorage.app",
+  messagingSenderId: "173147556187",
+  appId: "1:173147556187:web:66a68f5991ff4fa334b27e",
+  measurementId: "G-C79P46KYNL"
 };
 
 let app, auth, db, firebaseReady = false;
@@ -1188,27 +1188,6 @@ function escapeHTML(str){
   d.textContent = str;
   return d.innerHTML;
 }
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDIhYE89-67cpH_SeU9wP_rvbRPH3Ossl8",
-  authDomain: "tuklasmauban-bcn.firebaseapp.com",
-  projectId: "tuklasmauban-bcn",
-  storageBucket: "tuklasmauban-bcn.firebasestorage.app",
-  messagingSenderId: "173147556187",
-  appId: "1:173147556187:web:66a68f5991ff4fa334b27e",
-  measurementId: "G-C79P46KYNL"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 </script> 
 </body>
 </html>
