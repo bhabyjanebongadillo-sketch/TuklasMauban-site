@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -79,6 +79,23 @@
     padding:4px 6px;
     flex-shrink:0;
   }
+  .langBtn{
+    background:rgba(255,255,255,.15);
+    border:1px solid rgba(255,255,255,.4);
+    color:#fff;
+    font-size:12.5px;
+    font-weight:700;
+    font-family:'Inter', sans-serif;
+    padding:7px 11px;
+    border-radius:99px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:5px;
+    flex-shrink:0;
+    white-space:nowrap;
+  }
+  .langBtn:hover{ background:rgba(255,255,255,.25); }
   .loginPill{
     display:flex;
     align-items:center;
@@ -448,6 +465,38 @@
     margin-bottom:10px;
     font-family:'Inter', sans-serif;
   }
+
+  /* Password field with show/hide toggle */
+  .pwField{
+    position:relative;
+    margin-bottom:10px;
+  }
+  .pwField input{
+    width:100%;
+    border:2px solid var(--line);
+    border-radius:12px;
+    padding:11px 44px 11px 13px;
+    font-size:14px;
+    margin-bottom:0;
+    font-family:'Inter', sans-serif;
+  }
+  .pwToggle{
+    position:absolute;
+    right:4px;
+    top:50%;
+    transform:translateY(-50%);
+    background:none;
+    border:none;
+    font-size:18px;
+    line-height:1;
+    cursor:pointer;
+    padding:8px 9px;
+    color:#8a8175;
+    border-radius:8px;
+  }
+  .pwToggle:hover{ background:var(--cream); }
+  .pwToggle:focus-visible{ outline:2px solid var(--mango); outline-offset:1px; }
+
   .modalBox .primaryBtn{
     width:100%;
     background:var(--mango);
@@ -545,17 +594,18 @@
     <div class="brand">TuklasMauban</div>
     <div class="sub" id="headerSub">Mauban, Quezon — hanapin natin</div>
   </div>
+  <button class="langBtn" id="langBtn" aria-label="Palitan ang wika / Switch language">🌐 <span id="langBtnLabel">EN</span></button>
   <button class="headerBtn" id="menuBtn" aria-label="Menu">☰</button>
 </header>
 
 <div class="menuDropdown hidden" id="menuDropdown">
-  <button id="menuHome">🏠 Home</button>
-  <button id="menuCategories">🗂️ Mga Kategorya</button>
-  <button id="menuAuth">👤 Mag-sign in</button>
+  <button id="menuHome">🏠 <span data-i18n="menuHome">Home</span></button>
+  <button id="menuCategories">🗂️ <span data-i18n="menuCategories">Mga Kategorya</span></button>
+  <button id="menuAuth">👤 <span data-i18n="menuAuth">Mag-sign in</span></button>
 </div>
 
 <main>
- <button class="loginPill" id="loginPill">👤 Mag-sign in</button>
+ <button class="loginPill" id="loginPill">👤 <span data-i18n="loginPill">Mag-sign in</span></button>
   <!-- SCREEN -1: SIGN IN FIRST -->
   <section id="screen-entry">
     <div class="entryWrap">
@@ -566,7 +616,10 @@
         <div class="entryErr" id="entryErr"></div>
         <input type="text" id="entryName" placeholder="Pangalan (ipapakita sa review)" class="hidden">
         <input type="email" id="entryEmail" placeholder="Email">
-        <input type="password" id="entryPass" placeholder="Password">
+        <div class="pwField">
+          <input type="password" id="entryPass" placeholder="Password">
+          <button type="button" class="pwToggle" id="entryPassToggle" aria-label="Ipakita ang password" data-shown="false">👁️</button>
+        </div>
         <button class="primaryBtn" id="entrySubmit">Sign In</button>
         <div class="switchRow">
           <span id="entrySwitchTxt">Wala ka pang account?</span>
@@ -581,12 +634,12 @@
     <div class="hero">
       <div class="hero-content">
         <div class="hero-emoji">🧭</div>
-        <h1>Mabuhay, <span>Mauban!</span></h1>
-        <p>Ang Mauban ay isang mayamang bayan sa Quezon province, hangganan ng Lamon Bay,
+        <h1 id="heroTitlePre">Mabuhay, <span>Mauban!</span></h1>
+        <p id="heroPara">Ang Mauban ay isang mayamang bayan sa Quezon province, hangganan ng Lamon Bay,
            kilala sa magagandang resort, talon, at malinis na kalikasan. Tuklasin natin
            ang mga sikat at itinatagong lugar dito — mula sa mga resort hanggang sa mga
            lokal na kainan at negosyo sa paligid mo.</p>
-        <button class="hero-btn" id="exploreBtn">🗺️ Explore Destinations</button>
+        <button class="hero-btn" id="exploreBtn">🗺️ <span id="exploreBtnLabel">Explore Destinations</span></button>
       </div>
     </div>
   </section>
@@ -594,8 +647,8 @@
   <!-- SCREEN 1: CATEGORIES -->
   <section id="screen-categories" class="hidden padded">
     <div class="intro">
-      <h2>Ikaw ba'y Pasaan?</h2>
-      <p>Pumili ng kategorya para makita ang mga lugar sa paligid mo.</p>
+      <h2 id="catIntroTitle">Ikaw ba'y Pasaan?</h2>
+      <p id="catIntroPara">Pumili ng kategorya para makita ang mga lugar sa paligid mo.</p>
     </div>
     <div class="cat-grid" id="catGrid"></div>
   </section>
@@ -619,7 +672,7 @@
       <iframe id="mapIframe" src="" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
     <a class="directions-btn" id="directionsLink" href="#" target="_blank" rel="noopener">
-      📍 I-google Maps ang Direksyon
+      📍 <span id="directionsLabel">I-google Maps ang Direksyon</span>
     </a>
     <div class="place-detail" id="placeDetail"></div>
 
@@ -633,7 +686,7 @@
         </div>
       </div>
 
-      <div class="rate-label">Paano mo ito i-rarate?</div>
+      <div class="rate-label" id="rateLabel">Paano mo ito i-rarate?</div>
       <div class="stars" id="ratingStars"></div>
       <div class="rate-msg" id="ratingMsg">I-tap ang bituin para mag-rate.</div>
 
@@ -658,7 +711,10 @@
     <div class="modalErr" id="authErr"></div>
     <input type="text" id="authName" placeholder="Pangalan (ipapakita sa review)" class="hidden">
     <input type="email" id="authEmail" placeholder="Email">
-    <input type="password" id="authPass" placeholder="Password">
+    <div class="pwField">
+      <input type="password" id="authPass" placeholder="Password">
+      <button type="button" class="pwToggle" id="authPassToggle" aria-label="Ipakita ang password" data-shown="false">👁️</button>
+    </div>
     <button class="primaryBtn" id="authSubmit">Sign In</button>
     <div class="switchRow">
       <span id="authSwitchTxt">Wala ka pang account?</span>
@@ -713,49 +769,212 @@ try{
    DATA — replace with your real businesses.
    =========================================================== */
 const CATEGORIES = [
-  { id:'resort',  name:'Water Attractions', emoji:'🏖️', img:'https://scontent.fmnl12-1.fna.fbcdn.net/v/t39.30808-6/756661826_1478567471032469_4606569422330330171_n.jpg?stp=dst-jpg_tt6&cstp=mx700x500&ctp=s700x500&_nc_cat=109&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeEC6YHJlDFzkgV1i4j-jegLe07xa0xTDBp7TvFrTFMMGpDyvXHb4iWKYTsohmVnNpu2miEZYE07YQ6tRpWPu80T&_nc_ohc=iRt_8yEnG0YQ7kNvwF05r8V&_nc_oc=AdoijYVhbODBPhfdGD9e-oql2ZKbdRM_AMhHlPhfuP1WIMGumcUlMO4V6N6GW8T7PPc&_nc_pt=1&_nc_zt=23&_nc_ht=scontent.fmnl12-1.fna&_nc_gid=cvu0j9kBnq5CMGNmF3l9Sw&_nc_ss=7b2a8&oh=00_AQBe2M8XkDAJdezOanpPANHXe-BBIlN39yk4V3E90tq2fw&oe=6A6A6D7B' },
-  { id:'cafe',    name:"Cafes", emoji:'☕', img:'https://picsum.photos/seed/mauban-cafe/700/500' },
-  { id:'parlor',  name:'Parlors', emoji:'💇‍♀️', img:'https://picsum.photos/seed/mauban-parlor/700/500' },
-  { id:'barber',  name:'Barber Shops', emoji:'💈', img:'https://picsum.photos/seed/mauban-barber/700/500' },
-  { id:'market',  name:'Food Markets', emoji:'🥭', img:'https://picsum.photos/seed/mauban-market/700/500' },
-  { id:'in',      name:'Inns', emoji:'🏨', img:'https://picsum.photos/seed/mauban-inn/700/500' },
+  { id:'resort', name:{tl:'Water Attractions', en:'Water Attractions'}, emoji:'🏖️', img:'https://scontent.fmnl12-1.fna.fbcdn.net/v/t39.30808-6/756661826_1478567471032469_4606569422330330171_n.jpg?stp=dst-jpg_tt6&cstp=mx700x500&ctp=s700x500&_nc_cat=109&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeEC6YHJlDFzkgV1i4j-jegLe07xa0xTDBp7TvFrTFMMGpDyvXHb4iWKYTsohmVnNpu2miEZYE07YQ6tRpWPu80T&_nc_ohc=iRt_8yEnG0YQ7kNvwF05r8V&_nc_oc=AdoijYVhbODBPhfdGD9e-oql2ZKbdRM_AMhHlPhfuP1WIMGumcUlMO4V6N6GW8T7PPc&_nc_pt=1&_nc_zt=23&_nc_ht=scontent.fmnl12-1.fna&_nc_gid=cvu0j9kBnq5CMGNmF3l9Sw&_nc_ss=7b2a8&oh=00_AQBe2M8XkDAJdezOanpPANHXe-BBIlN39yk4V3E90tq2fw&oe=6A6A6D7B' },
+  { id:'cafe', name:{tl:'Mga Cafe', en:'Cafes'}, emoji:'☕', img:'https://scontent.fmnl12-1.fna.fbcdn.net/v/t39.30808-6/758589546_1479548960934320_7723664947482185782_n.jpg?stp=dst-jpg_tt6&cstp=mx1484x1060&ctp=s1484x1060&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeG35e7cbSWUxuxJ7VYOoMBvqcd2Hfhe_5qpx3Yd-F7_mm1QTXjvE6gvZGwWd5QR_d_vwfnyZslFGmnQ6_AKECRQ&_nc_ohc=EXkrUWx_wAIQ7kNvwFTMXYU&_nc_oc=Adq6nhKqIrA5rDaMZ0WVS-XP0v60Z_Hvh8sUjbhL2cfEQSTuIhQbQ9MMk49Dv7l2_rk&_nc_pt=1&_nc_zt=23&_nc_ht=scontent.fmnl12-1.fna&_nc_gid=RudIbed21FtuJzYwUcUWeg&_nc_ss=7b2a8&oh=00_AQBp12hOz5jzLnBWoQrM_XU3at4mq-Vht_Yb_2esNa_t7A&oe=6A6E64D3' },
+  { id:'parlor', name:{tl:'Mga Parlor', en:'Parlors'}, emoji:'💇‍♀️', img:'https://picsum.photos/seed/mauban-parlor/700/500' },
+  { id:'barber', name:{tl:'Mga Barber Shop', en:'Barber Shops'}, emoji:'💈', img:'https://picsum.photos/seed/mauban-barber/700/500' },
+  { id:'market', name:{tl:'Mga Food Market', en:'Food Markets'}, emoji:'🥭', img:'https://scontent.fmnl12-1.fna.fbcdn.net/v/t39.30808-6/756141972_1479549187600964_8660596895495520606_n.jpg?stp=dst-jpg_tt6&cstp=mx1484x1060&ctp=s1484x1060&_nc_cat=110&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeH90CnHCiAztQGI-mtJrHEvo-4sbNGvpaqj7ixs0a-lqhoS8cErla7Db8Z_-IcF40BRwp9sylGrgShnFqMQY5BU&_nc_ohc=29vmKCV8COkQ7kNvwHqgKHB&_nc_oc=Ado5siENZh_pQMmjHCcwTv9DmfDQq7cw4h4-NGnKxatMJLhQQ5QhYKFMxf-LvfLRuJ4&_nc_pt=1&_nc_zt=23&_nc_ht=scontent.fmnl12-1.fna&_nc_gid=wdKpYYT1GyCd7bicDKrVLw&_nc_ss=7b2a8&oh=00_AQDbaGs1U4A-jpBvFDheanXFpfDwww2X4VyjIqky1J4hDA&oe=6A6E7000' },
+  { id:'in', name:{tl:'Mga Inn', en:'Inns'}, emoji:'🏨', img:'https://picsum.photos/seed/mauban-inn/700/500' },
 ];
 
 const PLACES = [
-  { id:1, cat:'resort', name:'Liwayway Sono Benedetto Resort', addr:'Sitio Mapuputi Brgy. Liwayway, Mauban, Quezon', tags:['Swimming','Cottages'], lat:14.1099026,lng:121.6852639, desc:'Cottages fronting the bay, open daily 7AM–7PM. Good for family day outings.' },
-  { id:2, cat:'resort', name:'La Pavielle Resort & Event Place', addr:'Sitio Ilaya Brgy. Polo, Mauban, Quezon', tags:['Swimming','Cottages'], lat:14.1797992, lng:121.710736, desc:'A premier function and recreation venue.' },
-  { id:3, cat:'market', name:'Hello Halo', addr:'Sitio Ilaya Brgy. Polo, Mauban, Quezon', tags:['Food','Dessert'], lat:14.1797248, lng:121.7133544, desc:'A charming, breezy palayan (native-style stand) known for its signature hearty meals and creamy, overload shaved-ice desserts. Operating daily from 9:00 AM–8:00 PM.' },
-  { id:4, cat:'cafe', name:"Coffee Spot", addr:'Sitio Pilaway Brgy. Polo, Mauban, Quezon', tags:['Local coffee'], lat:14.176903, lng:121.7255783, desc:'A cozy resort-style cafe known for its chill vibes and relaxing atmosphere.' },
-  { id:5, cat:'resort', name:'Sampitan Beach Resort', addr:'Cagsiay II, Mauban, Quezon', tags:['Swimming','Cottages'], lat:14.2430982, lng:121.7583767, desc:'A popular, budget-friendly coastal gateway. It features a tranquil coastline perfect for swimming, tent camping, and family outings.' },
-  { id:6, cat:'resort', name:'Aguho Playa', addr:'Cagbalete 1, Mauban, Quezon', tags:['Beach','Relaxation'], lat:14.257527, lng:121.8291729, desc:'A budget-friendly beachfront retreat located on Cagbalete Island, a perfect escape for travelers and backpackers wanting to unplug from city life.' },
-  { id:7, cat:'resort', name:'Alitap Falls', addr:'Brgy. Alitap, Mauban, Quezon', tags:['Waterfall'], lat:14.1247298, lng:121.7476844, desc:'A hidden forest gem featuring a pristine cascade of crisp, cold water springing over rocky terrain.' },
-  { id:8, cat:'resort', name:'Bisibis Falls', addr:'Brgy. Cagsiay III, Mauban, Quezon', tags:['Waterfall'], lat:14.3291361, lng:121.7237654, desc:'A unique, moderately wide cascade that empties directly into the Pacific Ocean against a backdrop of earth-tone rocks and thick vegetation.' },
-  { id:9, cat:'resort', name:'Gat Uban Park', addr:'Enverga Boulevard, Mauban, Quezon', tags:['Hangout Spot'], lat:14.1893783, lng:121.7330779, desc:'Features a bronze statue of the town\u2019s legendary Dumagat chieftain and local hero. A popular, breezy spot for locals and tourists to relax, enjoy the sea breeze, and watch the sunset.' },
-  { id:10, cat:'market', name:'Jollibee', addr:'Barangay Polo, Mauban, Quezon', tags:['Fast Food','Desserts'], lat:14.1782379, lng:121.7193119, desc:"Mauban's very first Jollibee branch — the go-to spot for Chickenjoy, burgers, and the Filipino favorites the whole family loves." },
-  { id:11, cat:'resort', name:'Public Bath', addr:'Mabini St., Mauban, Quezon', tags:['Sanctuary','Bath house'], lat:14.1923315, lng:121.7324695, desc:'A historic, Spanish-era landmark built in 1725, constructed using limestone and seashells.' },
-  { id:12, cat:'resort', name:'Doña Choleng Resort', addr:'Doña Choleng Island Resort, Mauban, Quezon', tags:['Beach'], lat:14.253596, lng:121.8228563, desc:'A beachfront destination on Cagbalete Island. Known for its white sand beaches, clear waters, and peaceful island atmosphere, offering camping, snorkeling, and sunrise/sunset views.' },
-  { id:13, cat:'resort', name:'Marlorica Resort', addr:'Sitio Bundok, Santol, Mauban, Quezon', tags:['Swimming & Relaxation'], lat:14.1784604, lng:121.7063571, desc:'A Thai-inspired tropical escape in Sitio Bundok, Santol. Clear swimming pools, water slides, and lush green rice paddy views.' },
-  { id:14, cat:'in', name:'Erika Apartelle', addr:'Gen. Flores/Gomez St., Brgy. Lual, Mauban, Quezon', tags:['Accommodation','Loft-style units'], lat:14.1910475, lng:121.7306933, desc:'A cozy, modern accommodation offering loft-style units ideal for families and groups, with aircon, free Wi-Fi, and Smart TVs.' },
-  { id:15, cat:'in', name:'Neil Frank Hotel', addr:'Enverga St., Brgy. Bagong Bayan, Mauban, Quezon', tags:['Accommodation'], lat:14.1856689, lng:121.7307312, desc:'A cozy, home-style lodging with air-conditioned rooms, an on-site souvenir shop, and warm Maubanin hospitality.' },
-  { id:16, cat:'cafe', name:'HorHe Coffee Dine', addr:'Mauban, Quezon', tags:['Coffee'], lat:14.1856689, lng:121.7307312, desc:'A local coffee spot in Mauban.' },
+  { id:1, cat:'resort', name:'Liwayway Sono Benedetto Resort', addr:'Sitio Mapuputi Brgy. Liwayway, Mauban, Quezon', tags:['Swimming','Cottages'], lat:14.1099026,lng:121.6852639, desc:{tl:'Cottages fronting the bay, open daily 7AM–7PM. Good for family day outings.', en:'Cottages fronting the bay, open daily 7AM–7PM. Good for family day outings.'} },
+  { id:2, cat:'resort', name:'La Pavielle Resort & Event Place', addr:'Sitio Ilaya Brgy. Polo, Mauban, Quezon', tags:['Swimming','Cottages'], lat:14.1797992, lng:121.710736, desc:{tl:'A premier function and recreation venue.', en:'A premier function and recreation venue.'} },
+  { id:3, cat:'market', name:'Hello Halo', addr:'Sitio Ilaya Brgy. Polo, Mauban, Quezon', tags:['Food','Dessert'], lat:14.1797248, lng:121.7133544, desc:{tl:'A charming, breezy palayan (native-style stand) known for its signature hearty meals and creamy, overload shaved-ice desserts. Operating daily from 9:00 AM–8:00 PM.', en:'A charming, breezy palayan (native-style stand) known for its signature hearty meals and creamy, overload shaved-ice desserts. Operating daily from 9:00 AM–8:00 PM.'} },
+  { id:4, cat:'cafe', name:"Coffee Spot", addr:'Sitio Pilaway Brgy. Polo, Mauban, Quezon', tags:['Local coffee'], lat:14.176903, lng:121.7255783, desc:{tl:'A cozy resort-style cafe known for its chill vibes and relaxing atmosphere.', en:'A cozy resort-style cafe known for its chill vibes and relaxing atmosphere.'} },
+  { id:5, cat:'resort', name:'Sampitan Beach Resort', addr:'Cagsiay II, Mauban, Quezon', tags:['Swimming','Cottages'], lat:14.2430982, lng:121.7583767, desc:{tl:'A popular, budget-friendly coastal gateway. It features a tranquil coastline perfect for swimming, tent camping, and family outings.', en:'A popular, budget-friendly coastal gateway. It features a tranquil coastline perfect for swimming, tent camping, and family outings.'} },
+  { id:6, cat:'resort', name:'Aguho Playa', addr:'Cagbalete 1, Mauban, Quezon', tags:['Beach','Relaxation'], lat:14.257527, lng:121.8291729, desc:{tl:'A budget-friendly beachfront retreat located on Cagbalete Island, a perfect escape for travelers and backpackers wanting to unplug from city life.', en:'A budget-friendly beachfront retreat located on Cagbalete Island, a perfect escape for travelers and backpackers wanting to unplug from city life.'} },
+  { id:7, cat:'resort', name:'Alitap Falls', addr:'Brgy. Alitap, Mauban, Quezon', tags:['Waterfall'], lat:14.1247298, lng:121.7476844, desc:{tl:'A hidden forest gem featuring a pristine cascade of crisp, cold water springing over rocky terrain.', en:'A hidden forest gem featuring a pristine cascade of crisp, cold water springing over rocky terrain.'} },
+  { id:8, cat:'resort', name:'Bisibis Falls', addr:'Brgy. Cagsiay III, Mauban, Quezon', tags:['Waterfall'], lat:14.3291361, lng:121.7237654, desc:{tl:'A unique, moderately wide cascade that empties directly into the Pacific Ocean against a backdrop of earth-tone rocks and thick vegetation.', en:'A unique, moderately wide cascade that empties directly into the Pacific Ocean against a backdrop of earth-tone rocks and thick vegetation.'} },
+  { id:9, cat:'resort', name:'Gat Uban Park', addr:'Enverga Boulevard, Mauban, Quezon', tags:['Hangout Spot'], lat:14.1893783, lng:121.7330779, desc:{tl:'Features a bronze statue of the town\u2019s legendary Dumagat chieftain and local hero. A popular, breezy spot for locals and tourists to relax, enjoy the sea breeze, and watch the sunset.', en:'Features a bronze statue of the town\u2019s legendary Dumagat chieftain and local hero. A popular, breezy spot for locals and tourists to relax, enjoy the sea breeze, and watch the sunset.'} },
+  { id:10, cat:'market', name:'Jollibee', addr:'Barangay Polo, Mauban, Quezon', tags:['Fast Food','Desserts'], lat:14.1782379, lng:121.7193119, desc:{tl:"Mauban's very first Jollibee branch — the go-to spot for Chickenjoy, burgers, and the Filipino favorites the whole family loves.", en:"Mauban's very first Jollibee branch — the go-to spot for Chickenjoy, burgers, and the Filipino favorites the whole family loves."} },
+  { id:11, cat:'resort', name:'Public Bath', addr:'Mabini St., Mauban, Quezon', tags:['Sanctuary','Bath house'], lat:14.1923315, lng:121.7324695, desc:{tl:'A historic, Spanish-era landmark built in 1725, constructed using limestone and seashells.', en:'A historic, Spanish-era landmark built in 1725, constructed using limestone and seashells.'} },
+  { id:12, cat:'resort', name:'Doña Choleng Resort', addr:'Doña Choleng Island Resort, Mauban, Quezon', tags:['Beach'], lat:14.253596, lng:121.8228563, desc:{tl:'A beachfront destination on Cagbalete Island. Known for its white sand beaches, clear waters, and peaceful island atmosphere, offering camping, snorkeling, and sunrise/sunset views.', en:'A beachfront destination on Cagbalete Island. Known for its white sand beaches, clear waters, and peaceful island atmosphere, offering camping, snorkeling, and sunrise/sunset views.'} },
+  { id:13, cat:'resort', name:'Marlorica Resort', addr:'Sitio Bundok, Santol, Mauban, Quezon', tags:['Swimming & Relaxation'], lat:14.1784604, lng:121.7063571, desc:{tl:'A Thai-inspired tropical escape in Sitio Bundok, Santol. Clear swimming pools, water slides, and lush green rice paddy views.', en:'A Thai-inspired tropical escape in Sitio Bundok, Santol. Clear swimming pools, water slides, and lush green rice paddy views.'} },
+  { id:14, cat:'in', name:'Erika Apartelle', addr:'Gen. Flores/Gomez St., Brgy. Lual, Mauban, Quezon', tags:['Accommodation','Loft-style units'], lat:14.1910475, lng:121.7306933, desc:{tl:'A cozy, modern accommodation offering loft-style units ideal for families and groups, with aircon, free Wi-Fi, and Smart TVs.', en:'A cozy, modern accommodation offering loft-style units ideal for families and groups, with aircon, free Wi-Fi, and Smart TVs.'} },
+  { id:15, cat:'in', name:'Neil Frank Hotel', addr:'Enverga St., Brgy. Bagong Bayan, Mauban, Quezon', tags:['Accommodation'], lat:14.1856689, lng:121.7307312, desc:{tl:'A cozy, home-style lodging with air-conditioned rooms, an on-site souvenir shop, and warm Maubanin hospitality.', en:'A cozy, home-style lodging with air-conditioned rooms, an on-site souvenir shop, and warm Maubanin hospitality.'} },
+  { id:16, cat:'cafe', name:'HorHe Coffee Dine', addr:'Mauban, Quezon', tags:['Coffee'], lat:14.1856689, lng:121.7307312, desc:{tl:'A local coffee spot in Mauban.', en:'A local coffee spot in Mauban.'} },
 ];
+
+/* ===========================================================
+   2) I18N — TAGALOG / ENGLISH TRANSLATION DICTIONARY
+   ---------------------------------------------------------
+   Idagdag ang bagong key-value pairs dito kung magdadagdag
+   ka ng bagong text sa UI. Tawagin ang t('key') sa JS, o
+   gamitin ang data-i18n="key" attribute sa static HTML text.
+   =========================================================== */
+const I18N = {
+  tl: {
+    headerSubEntry: 'Mag-sign in muna',
+    headerSubHero: 'Mauban, Quezon — hanapin natin',
+    headerSubCategories: 'Pumili ng kategorya',
+    headerSubListings: 'Mga resulta',
+    headerSubMap: 'Detalye ng lugar',
+    menuHome: 'Home',
+    menuCategories: 'Mga Kategorya',
+    menuAuth: 'Mag-sign in',
+    menuAuthOut: 'Sign out',
+    loginPill: 'Mag-sign in',
+    loginPillGreeting: '👋',
+    entryTitleSignin: 'Mag-sign in muna',
+    entryTitleSignup: 'Gumawa ng account',
+    entrySubSignin: 'Mag-sign in o gumawa ng account para simulan ang pagtuklas sa Mauban.',
+    entrySubSignup: 'Ilagay ang iyong pangalan, email, at password para makapag-sign up.',
+    entryNamePh: 'Pangalan (ipapakita sa review)',
+    entryEmailPh: 'Email',
+    entryPassPh: 'Password',
+    entrySubmitSignin: 'Sign In',
+    entrySubmitSignup: 'Sign Up',
+    entrySwitchTxtSignin: 'Wala ka pang account?',
+    entrySwitchTxtSignup: 'May account ka na?',
+    entrySwitchBtnSignin: 'Mag-sign up',
+    entrySwitchBtnSignup: 'Mag-sign in',
+    heroTitle: 'Mabuhay, ',
+    heroTitleSpan: 'Mauban!',
+    heroPara: 'Ang Mauban ay isang mayamang bayan sa Quezon province, hangganan ng Lamon Bay, kilala sa magagandang resort, talon, at malinis na kalikasan. Tuklasin natin ang mga sikat at itinatagong lugar dito — mula sa mga resort hanggang sa mga lokal na kainan at negosyo sa paligid mo.',
+    exploreBtn: 'Explore Destinations',
+    catIntroTitle: "Ikaw ba'y Pasaan?",
+    catIntroPara: 'Pumili ng kategorya para makita ang mga lugar sa paligid mo.',
+    catCount: 'lugar',
+    listEyebrow: 'Kategorya',
+    listTitleDefault: 'Mga Lugar',
+    emptyCategory: 'Wala pang lugar sa kategoryang ito.',
+    noRatingYet: 'Wala pang rating',
+    directionsLabel: 'I-google Maps ang Direksyon',
+    rateLabel: 'Paano mo ito i-rarate?',
+    ratingMsgDefault: 'I-tap ang bituin para mag-rate.',
+    ratingMsgNeedLogin: 'I-tap ang bituin para mag-rate (kailangan mag-sign in).',
+    ratingMsgPicked: (n)=> `Pinili mo: ${n} bituin`,
+    ratingMsgNeedStar: 'Pumili muna ng bituin bago mag-post.',
+    ratingMsgNoFirebase: 'Hindi pa na-configure ang Firebase.',
+    ratingMsgThanks: 'Salamat sa iyong review!',
+    ratingMsgError: 'May error, subukan ulit.',
+    reviewTextPh: 'Isulat ang iyong karanasan dito... (optional)',
+    submitReviewBtn: 'I-post ang Review',
+    loginNudge: 'Mag-<b>sign in</b> muna para makapag-rate at makapag-comment.',
+    loginNudgeBtnLabel: 'sign in',
+    noReviewsCount: 'Wala pang review',
+    noReviewsCountBig: 'Wala pang review — ikaw ang maging una!',
+    reviewsCountTxt: (n)=> `${n} na tao ang nag-rate`,
+    reviewEmpty: 'Wala pang review dito.',
+    firebaseNotSetup: 'Setup mo muna ang Firebase config sa code para gumana ang reviews.',
+    authTitleSignin: 'Mag-sign in',
+    authTitleSignup: 'Gumawa ng account',
+    authSubSignin: 'Kailangan mong mag-sign in para maka-rate at makapag-comment.',
+    authSubSignup: 'Kailangan lang ng pangalan, email, at password.',
+    authNamePh: 'Pangalan (ipapakita sa review)',
+    fillEmailPass: 'Punan ang email at password.',
+    fillName: 'Ilagay ang iyong pangalan.',
+    firebaseNotConfigured: 'Hindi pa na-configure ang Firebase — palitan ang firebaseConfig sa code.',
+    pwShow: 'Ipakita ang password',
+    pwHide: 'Itago ang password',
+    authErrEmailInUse: 'May account na gamit ang email na ito.',
+    authErrInvalidEmail: 'Hindi valid ang email.',
+    authErrWeakPassword: 'Dapat 6+ characters ang password.',
+    authErrWrongPassword: 'Mali ang email o password.',
+    authErrUserNotFound: 'Walang account na gamit ang email na ito.',
+    authErrDefault: 'May error na nangyari. Subukan ulit.',
+  },
+  en: {
+    headerSubEntry: 'Sign in first',
+    headerSubHero: 'Mauban, Quezon — let\u2019s explore',
+    headerSubCategories: 'Choose a category',
+    headerSubListings: 'Results',
+    headerSubMap: 'Place details',
+    menuHome: 'Home',
+    menuCategories: 'Categories',
+    menuAuth: 'Sign in',
+    menuAuthOut: 'Sign out',
+    loginPill: 'Sign in',
+    loginPillGreeting: '👋',
+    entryTitleSignin: 'Sign in first',
+    entryTitleSignup: 'Create an account',
+    entrySubSignin: 'Sign in or create an account to start exploring Mauban.',
+    entrySubSignup: 'Enter your name, email, and password to sign up.',
+    entryNamePh: 'Name (shown on reviews)',
+    entryEmailPh: 'Email',
+    entryPassPh: 'Password',
+    entrySubmitSignin: 'Sign In',
+    entrySubmitSignup: 'Sign Up',
+    entrySwitchTxtSignin: "Don't have an account?",
+    entrySwitchTxtSignup: 'Already have an account?',
+    entrySwitchBtnSignin: 'Sign up',
+    entrySwitchBtnSignup: 'Sign in',
+    heroTitle: 'Welcome, ',
+    heroTitleSpan: 'Mauban!',
+    heroPara: 'Mauban is a thriving town in Quezon province, bordering Lamon Bay, known for its beautiful resorts, waterfalls, and unspoiled nature. Let\u2019s discover the popular and hidden spots here — from resorts to local eateries and businesses around you.',
+    exploreBtn: 'Explore Destinations',
+    catIntroTitle: 'Where are you headed?',
+    catIntroPara: 'Choose a category to see places near you.',
+    catCount: 'places',
+    listEyebrow: 'Category',
+    listTitleDefault: 'Places',
+    emptyCategory: 'No places in this category yet.',
+    noRatingYet: 'No ratings yet',
+    directionsLabel: 'Get Directions on Google Maps',
+    rateLabel: 'How would you rate this?',
+    ratingMsgDefault: 'Tap a star to rate.',
+    ratingMsgNeedLogin: 'Tap a star to rate (sign in required).',
+    ratingMsgPicked: (n)=> `You picked: ${n} star${n>1?'s':''}`,
+    ratingMsgNeedStar: 'Pick a star before posting.',
+    ratingMsgNoFirebase: 'Firebase is not configured yet.',
+    ratingMsgThanks: 'Thanks for your review!',
+    ratingMsgError: 'Something went wrong, please try again.',
+    reviewTextPh: 'Write about your experience here... (optional)',
+    submitReviewBtn: 'Post Review',
+    loginNudge: 'Please <b>sign in</b> first to rate and comment.',
+    loginNudgeBtnLabel: 'sign in',
+    noReviewsCount: 'No reviews yet',
+    noReviewsCountBig: 'No reviews yet — be the first!',
+    reviewsCountTxt: (n)=> `${n} ${n===1?'person has':'people have'} rated this`,
+    reviewEmpty: 'No reviews here yet.',
+    firebaseNotSetup: 'Set up your Firebase config in the code first for reviews to work.',
+    authTitleSignin: 'Sign in',
+    authTitleSignup: 'Create an account',
+    authSubSignin: 'You need to sign in to rate and comment.',
+    authSubSignup: 'Just need your name, email, and password.',
+    authNamePh: 'Name (shown on reviews)',
+    fillEmailPass: 'Please fill in email and password.',
+    fillName: 'Please enter your name.',
+    firebaseNotConfigured: 'Firebase is not configured yet — replace firebaseConfig in the code.',
+    pwShow: 'Show password',
+    pwHide: 'Hide password',
+    authErrEmailInUse: 'An account already uses this email.',
+    authErrInvalidEmail: 'That email is not valid.',
+    authErrWeakPassword: 'Password should be 6+ characters.',
+    authErrWrongPassword: 'Incorrect email or password.',
+    authErrUserNotFound: 'No account uses this email.',
+    authErrDefault: 'Something went wrong. Please try again.',
+  }
+};
+
+let currentLang = 'tl';
+function t(key, ...args){
+  const entry = I18N[currentLang][key];
+  if(typeof entry === 'function') return entry(...args);
+  return entry !== undefined ? entry : key;
+}
+function localized(field){
+  // field is an object like {tl:'...', en:'...'} — falls back to tl then en
+  if(field && typeof field === 'object') return field[currentLang] || field.tl || field.en || '';
+  return field || '';
+}
 
 /* ===================== AUTH STATE ===================== */
 let currentUser = null; // {uid, name, email}
 let authMode = 'signin'; // 'signin' | 'signup'
-let pendingReviewIntent = false;
-let pendingAction = null; // 'explore' | null — what to do right after a successful sign-in
+let entryMode = 'signin';
 
 const loginPill = document.getElementById('loginPill');
 const menuAuth = document.getElementById('menuAuth');
 
 function refreshAuthUI(){
   if(currentUser){
-    loginPill.textContent = '👋 ' + currentUser.name;
-    menuAuth.textContent = '🚪 Sign out';
+    loginPill.innerHTML = `${t('loginPillGreeting')} ${escapeHTML(currentUser.name)}`;
+    menuAuth.innerHTML = `🚪 <span>${t('menuAuthOut')}</span>`;
   }else{
-    loginPill.textContent = '👤 Mag-sign in';
-    menuAuth.textContent = '👤 Mag-sign in';
+    loginPill.innerHTML = `👤 <span>${t('loginPill')}</span>`;
+    menuAuth.innerHTML = `👤 <span>${t('menuAuth')}</span>`;
   }
 }
 
@@ -789,31 +1008,33 @@ function openAuthModal(mode){
   document.getElementById('authName').value = '';
   document.getElementById('authEmail').value = '';
   document.getElementById('authPass').value = '';
+  resetPwToggle('authPass', 'authPassToggle');
   updateAuthModalMode();
   document.getElementById('authModal').classList.remove('hidden');
 }
 function closeAuthModal(){
   document.getElementById('authModal').classList.add('hidden');
-  pendingReviewIntent = false;
-  pendingAction = null;
 }
 function updateAuthModalMode(){
   const nameInput = document.getElementById('authName');
   if(authMode === 'signup'){
-    document.getElementById('authTitle').textContent = 'Gumawa ng account';
-    document.getElementById('authSub').textContent = 'Kailangan lang ng pangalan, email, at password.';
+    document.getElementById('authTitle').textContent = t('authTitleSignup');
+    document.getElementById('authSub').textContent = t('authSubSignup');
     nameInput.classList.remove('hidden');
-    document.getElementById('authSubmit').textContent = 'Sign Up';
-    document.getElementById('authSwitchTxt').textContent = 'May account ka na?';
-    document.getElementById('authSwitchBtn').textContent = 'Mag-sign in';
+    document.getElementById('authSubmit').textContent = t('entrySubmitSignup');
+    document.getElementById('authSwitchTxt').textContent = t('entrySwitchTxtSignup');
+    document.getElementById('authSwitchBtn').textContent = t('entrySwitchBtnSignup');
   }else{
-    document.getElementById('authTitle').textContent = 'Mag-sign in';
-    document.getElementById('authSub').textContent = 'Kailangan mong mag-sign in para maka-rate at makapag-comment.';
+    document.getElementById('authTitle').textContent = t('authTitleSignin');
+    document.getElementById('authSub').textContent = t('authSubSignin');
     nameInput.classList.add('hidden');
-    document.getElementById('authSubmit').textContent = 'Sign In';
-    document.getElementById('authSwitchTxt').textContent = 'Wala ka pang account?';
-    document.getElementById('authSwitchBtn').textContent = 'Mag-sign up';
+    document.getElementById('authSubmit').textContent = t('entrySubmitSignin');
+    document.getElementById('authSwitchTxt').textContent = t('entrySwitchTxtSignin');
+    document.getElementById('authSwitchBtn').textContent = t('entrySwitchBtnSignin');
   }
+  document.getElementById('authName').placeholder = t('authNamePh');
+  document.getElementById('authEmail').placeholder = t('entryEmailPh');
+  document.getElementById('authPass').placeholder = t('entryPassPh');
 }
 
 document.getElementById('authClose').addEventListener('click', closeAuthModal);
@@ -838,17 +1059,17 @@ document.getElementById('authSubmit').addEventListener('click', async ()=>{
   const errEl = document.getElementById('authErr');
   errEl.textContent = '';
   if(!firebaseReady){
-    errEl.textContent = 'Hindi pa na-configure ang Firebase — palitan ang firebaseConfig sa code.';
+    errEl.textContent = t('firebaseNotConfigured');
     return;
   }
   const email = document.getElementById('authEmail').value.trim();
   const pass = document.getElementById('authPass').value;
   const name = document.getElementById('authName').value.trim();
-  if(!email || !pass){ errEl.textContent = 'Punan ang email at password.'; return; }
+  if(!email || !pass){ errEl.textContent = t('fillEmailPass'); return; }
 
   try{
     if(authMode === 'signup'){
-      if(!name){ errEl.textContent = 'Ilagay ang iyong pangalan.'; return; }
+      if(!name){ errEl.textContent = t('fillName'); return; }
       const cred = await createUserWithEmailAndPassword(auth, email, pass);
       await updateProfile(cred.user, { displayName: name });
       currentUser = { uid: cred.user.uid, name, email };
@@ -866,15 +1087,51 @@ document.getElementById('authSubmit').addEventListener('click', async ()=>{
 
 function friendlyAuthError(code){
   switch(code){
-    case 'auth/email-already-in-use': return 'May account na gamit ang email na ito.';
-    case 'auth/invalid-email': return 'Hindi valid ang email.';
-    case 'auth/weak-password': return 'Dapat 6+ characters ang password.';
+    case 'auth/email-already-in-use': return t('authErrEmailInUse');
+    case 'auth/invalid-email': return t('authErrInvalidEmail');
+    case 'auth/weak-password': return t('authErrWeakPassword');
     case 'auth/invalid-credential':
-    case 'auth/wrong-password': return 'Mali ang email o password.';
-    case 'auth/user-not-found': return 'Walang account na gamit ang email na ito.';
-    default: return 'May error na nangyari. Subukan ulit.';
+    case 'auth/wrong-password': return t('authErrWrongPassword');
+    case 'auth/user-not-found': return t('authErrUserNotFound');
+    default: return t('authErrDefault');
   }
 }
+
+/* ===================== PASSWORD SHOW/HIDE TOGGLE ===================== */
+function setupPwToggle(inputId, btnId){
+  const input = document.getElementById(inputId);
+  const btn = document.getElementById(btnId);
+  if(!input || !btn) return;
+  btn.addEventListener('click', ()=>{
+    const shown = btn.dataset.shown === 'true';
+    if(shown){
+      input.type = 'password';
+      btn.textContent = '👁️';
+      btn.dataset.shown = 'false';
+      btn.setAttribute('aria-label', t('pwShow'));
+    }else{
+      input.type = 'text';
+      btn.textContent = '🙈';
+      btn.dataset.shown = 'true';
+      btn.setAttribute('aria-label', t('pwHide'));
+    }
+    // Keep focus on the field for a smooth typing experience
+    input.focus();
+    const pos = input.value.length;
+    input.setSelectionRange && input.setSelectionRange(pos, pos);
+  });
+}
+function resetPwToggle(inputId, btnId){
+  const input = document.getElementById(inputId);
+  const btn = document.getElementById(btnId);
+  if(!input || !btn) return;
+  input.type = 'password';
+  btn.textContent = '👁️';
+  btn.dataset.shown = 'false';
+  btn.setAttribute('aria-label', t('pwShow'));
+}
+setupPwToggle('entryPass', 'entryPassToggle');
+setupPwToggle('authPass', 'authPassToggle');
 
 /* ===================== NAV / SCREENS ===================== */
 const screens = ['screen-entry','screen-hero','screen-categories','screen-listings','screen-map'];
@@ -889,11 +1146,11 @@ function showScreen(id, push=true){
     if(navStack[navStack.length-1] !== id) navStack.push(id);
   }
   const subMap = {
-    'screen-entry':'Mag-sign in muna',
-    'screen-hero':'Mauban, Quezon — hanapin natin',
-    'screen-categories':'Pumili ng kategorya',
-    'screen-listings':'Mga resulta',
-    'screen-map':'Detalye ng lugar'
+    'screen-entry': t('headerSubEntry'),
+    'screen-hero': t('headerSubHero'),
+    'screen-categories': t('headerSubCategories'),
+    'screen-listings': t('headerSubListings'),
+    'screen-map': t('headerSubMap')
   };
   document.getElementById('headerSub').textContent = subMap[id];
 }
@@ -923,24 +1180,104 @@ document.getElementById('menuCategories').addEventListener('click', ()=>{
   renderCategories(); navStack=['screen-hero','screen-categories']; showScreen('screen-categories', false);
 });
 
+/* ===================== LANGUAGE SWITCH ===================== */
+const langBtn = document.getElementById('langBtn');
+const langBtnLabel = document.getElementById('langBtnLabel');
+
+function applyStaticTranslations(){
+  // Header + hero
+  document.getElementById('heroTitlePre').innerHTML = `${escapeHTML(t('heroTitle'))}<span>${escapeHTML(t('heroTitleSpan'))}</span>`;
+  document.getElementById('heroPara').textContent = t('heroPara');
+  document.getElementById('exploreBtnLabel').textContent = t('exploreBtn');
+  document.getElementById('catIntroTitle').textContent = t('catIntroTitle');
+  document.getElementById('catIntroPara').textContent = t('catIntroPara');
+  document.getElementById('directionsLabel').textContent = t('directionsLabel');
+  document.getElementById('rateLabel').textContent = t('rateLabel');
+
+  // Entry screen
+  document.getElementById('entryName').placeholder = t('entryNamePh');
+  document.getElementById('entryEmail').placeholder = t('entryEmailPh');
+  document.getElementById('entryPass').placeholder = t('entryPassPh');
+  updateEntryMode();
+
+  // Auth modal
+  updateAuthModalMode();
+
+  // Menu + login pill
+  refreshAuthUI();
+  document.getElementById('menuHome').innerHTML = `🏠 <span>${t('menuHome')}</span>`;
+  document.getElementById('menuCategories').innerHTML = `🗂️ <span>${t('menuCategories')}</span>`;
+
+  // Review text placeholder (idle state, before a place is open)
+  const reviewTextEl = document.getElementById('reviewText');
+  if(reviewTextEl) reviewTextEl.placeholder = t('reviewTextPh');
+
+  // Password toggle aria-labels reflect current shown/hidden state
+  ['entryPassToggle','authPassToggle'].forEach(id=>{
+    const btn = document.getElementById(id);
+    if(!btn) return;
+    const shown = btn.dataset.shown === 'true';
+    btn.setAttribute('aria-label', shown ? t('pwHide') : t('pwShow'));
+  });
+
+  // Header sub-title for whichever screen is active
+  const active = screens.find(s => !document.getElementById(s).classList.contains('hidden')) || 'screen-hero';
+  const subMap = {
+    'screen-entry': t('headerSubEntry'),
+    'screen-hero': t('headerSubHero'),
+    'screen-categories': t('headerSubCategories'),
+    'screen-listings': t('headerSubListings'),
+    'screen-map': t('headerSubMap')
+  };
+  document.getElementById('headerSub').textContent = subMap[active];
+
+  document.documentElement.lang = currentLang;
+}
+
+function refreshDynamicScreens(){
+  // Re-render whatever dynamic content is currently visible so it picks up the new language
+  if(!document.getElementById('screen-categories').classList.contains('hidden')){
+    renderCategories();
+  }
+  if(!document.getElementById('screen-listings').classList.contains('hidden') && currentListCatId){
+    openListings(currentListCatId, false);
+  }
+  if(!document.getElementById('screen-map').classList.contains('hidden') && currentPlaceId){
+    const place = PLACES.find(p=>p.id===currentPlaceId);
+    if(place){
+      document.getElementById('placeDetail').textContent = localized(place.desc);
+      renderReviewControls(currentPlaceId);
+      loadReviews(currentPlaceId);
+    }
+  }
+}
+
+langBtn.addEventListener('click', ()=>{
+  currentLang = currentLang === 'tl' ? 'en' : 'tl';
+  langBtnLabel.textContent = currentLang === 'tl' ? 'EN' : 'TL';
+  applyStaticTranslations();
+  refreshDynamicScreens();
+});
+// Initialize toggle label to show the language you'd switch TO
+langBtnLabel.textContent = 'EN';
+
 /* ===================== ENTRY (FULL-PAGE SIGN IN) ===================== */
-let entryMode = 'signin';
 function updateEntryMode(){
   const nameInput = document.getElementById('entryName');
   if(entryMode === 'signup'){
-    document.getElementById('entryTitle').textContent = 'Gumawa ng account';
-    document.getElementById('entrySub').textContent = 'Ilagay ang iyong pangalan, email, at password para makapag-sign up.';
+    document.getElementById('entryTitle').textContent = t('entryTitleSignup');
+    document.getElementById('entrySub').textContent = t('entrySubSignup');
     nameInput.classList.remove('hidden');
-    document.getElementById('entrySubmit').textContent = 'Sign Up';
-    document.getElementById('entrySwitchTxt').textContent = 'May account ka na?';
-    document.getElementById('entrySwitchBtn').textContent = 'Mag-sign in';
+    document.getElementById('entrySubmit').textContent = t('entrySubmitSignup');
+    document.getElementById('entrySwitchTxt').textContent = t('entrySwitchTxtSignup');
+    document.getElementById('entrySwitchBtn').textContent = t('entrySwitchBtnSignup');
   }else{
-    document.getElementById('entryTitle').textContent = 'Mag-sign in muna';
-    document.getElementById('entrySub').textContent = 'Mag-sign in o gumawa ng account para simulan ang pagtuklas sa Mauban.';
+    document.getElementById('entryTitle').textContent = t('entryTitleSignin');
+    document.getElementById('entrySub').textContent = t('entrySubSignin');
     nameInput.classList.add('hidden');
-    document.getElementById('entrySubmit').textContent = 'Sign In';
-    document.getElementById('entrySwitchTxt').textContent = 'Wala ka pang account?';
-    document.getElementById('entrySwitchBtn').textContent = 'Mag-sign up';
+    document.getElementById('entrySubmit').textContent = t('entrySubmitSignin');
+    document.getElementById('entrySwitchTxt').textContent = t('entrySwitchTxtSignin');
+    document.getElementById('entrySwitchBtn').textContent = t('entrySwitchBtnSignin');
   }
 }
 document.getElementById('entrySwitchBtn').addEventListener('click', ()=>{
@@ -952,17 +1289,17 @@ document.getElementById('entrySubmit').addEventListener('click', async ()=>{
   const errEl = document.getElementById('entryErr');
   errEl.textContent = '';
   if(!firebaseReady){
-    errEl.textContent = 'Hindi pa na-configure ang Firebase — palitan ang firebaseConfig sa code.';
+    errEl.textContent = t('firebaseNotConfigured');
     return;
   }
   const email = document.getElementById('entryEmail').value.trim();
   const pass = document.getElementById('entryPass').value;
   const name = document.getElementById('entryName').value.trim();
-  if(!email || !pass){ errEl.textContent = 'Punan ang email at password.'; return; }
+  if(!email || !pass){ errEl.textContent = t('fillEmailPass'); return; }
 
   try{
     if(entryMode === 'signup'){
-      if(!name){ errEl.textContent = 'Ilagay ang iyong pangalan.'; return; }
+      if(!name){ errEl.textContent = t('fillName'); return; }
       const cred = await createUserWithEmailAndPassword(auth, email, pass);
       await updateProfile(cred.user, { displayName: name });
       currentUser = { uid: cred.user.uid, name, email };
@@ -974,6 +1311,7 @@ document.getElementById('entrySubmit').addEventListener('click', async ()=>{
     document.getElementById('entryEmail').value = '';
     document.getElementById('entryPass').value = '';
     document.getElementById('entryName').value = '';
+    resetPwToggle('entryPass', 'entryPassToggle');
     navStack = ['screen-hero'];
     showScreen('screen-hero', false);
   }catch(e){
@@ -990,22 +1328,24 @@ function renderCategories(){
     const btn = document.createElement('button');
     btn.className = 'cat-card';
     btn.style.backgroundImage = `url('${cat.img}')`;
-    btn.innerHTML = `<div class="cat-label"><span class="name">${cat.emoji} ${cat.name}</span><span class="count">${count} lugar</span></div>`;
+    btn.innerHTML = `<div class="cat-label"><span class="name">${cat.emoji} ${escapeHTML(localized(cat.name))}</span><span class="count">${count} ${t('catCount')}</span></div>`;
     btn.addEventListener('click', ()=> openListings(cat.id));
     grid.appendChild(btn);
   });
 }
 
 /* ===================== LISTINGS ===================== */
-function openListings(catId){
+let currentListCatId = null;
+function openListings(catId, doShowScreen=true){
+  currentListCatId = catId;
   const cat = CATEGORIES.find(c=>c.id===catId);
-  document.getElementById('listEyebrow').textContent = 'Kategorya';
-  document.getElementById('listTitle').textContent = cat ? `${cat.emoji} ${cat.name}` : 'Mga Lugar';
+  document.getElementById('listEyebrow').textContent = t('listEyebrow');
+  document.getElementById('listTitle').textContent = cat ? `${cat.emoji} ${localized(cat.name)}` : t('listTitleDefault');
   const container = document.getElementById('listContainer');
   container.innerHTML = '';
   const items = PLACES.filter(p=>p.cat===catId);
   if(items.length===0){
-    container.innerHTML = '<div class="empty">Wala pang lugar sa kategoryang ito.</div>';
+    container.innerHTML = `<div class="empty">${t('emptyCategory')}</div>`;
   }else{
     items.forEach(place=>{
       const card = document.createElement('button');
@@ -1013,10 +1353,10 @@ function openListings(catId){
       card.innerHTML = `
         <div class="thumb">${cat ? cat.emoji : '📍'}</div>
         <div class="info">
-          <h3>${place.name}</h3>
-          <div class="addr">${place.addr}</div>
+          <h3>${escapeHTML(place.name)}</h3>
+          <div class="addr">${escapeHTML(place.addr)}</div>
           <div class="tags">
-            ${place.tags.map(t=>`<span class="tag">${t}</span>`).join('')}
+            ${place.tags.map(tag=>`<span class="tag">${escapeHTML(tag)}</span>`).join('')}
             <span class="mini-stars" id="mini-${place.id}">…</span>
           </div>
         </div>
@@ -1026,7 +1366,7 @@ function openListings(catId){
       loadMiniRating(place.id);
     });
   }
-  showScreen('screen-listings');
+  if(doShowScreen) showScreen('screen-listings');
 }
 
 function loadMiniRating(placeId){
@@ -1037,7 +1377,7 @@ function loadMiniRating(placeId){
   onSnapshot(q, (snap)=>{
     const el2 = document.getElementById('mini-'+placeId);
     if(!el2) return;
-    if(snap.empty){ el2.innerHTML = '<span style="color:#a89f8f;font-weight:600;">Wala pang rating</span>'; return; }
+    if(snap.empty){ el2.innerHTML = `<span style="color:#a89f8f;font-weight:600;">${t('noRatingYet')}</span>`; return; }
     let sum=0, n=0;
     snap.forEach(d=>{ sum += d.data().rating; n++; });
     const avg = sum/n;
@@ -1054,7 +1394,7 @@ function openPlaceDetail(placeId){
   document.getElementById('mapAddr').textContent = place.addr;
   document.getElementById('mapIframe').src = `https://www.google.com/maps?q=${place.lat},${place.lng}&z=16&output=embed`;
   document.getElementById('directionsLink').href = `https://www.google.com/maps/dir/?api=1&destination=${place.lat},${place.lng}`;
-  document.getElementById('placeDetail').textContent = place.desc;
+  document.getElementById('placeDetail').textContent = localized(place.desc);
 
   renderReviewControls(placeId);
   loadReviews(placeId);
@@ -1084,29 +1424,30 @@ function renderReviewControls(placeId){
     b.addEventListener('click', ()=>{
       selectedRating = i;
       [...starsWrap.children].forEach((btn,idx)=> btn.classList.toggle('filled', idx < i));
-      msg.textContent = `Pinili mo: ${i} bituin`;
+      msg.textContent = t('ratingMsgPicked', i);
     });
     starsWrap.appendChild(b);
   }
 
   if(!currentUser){
-    formWrap.innerHTML = `<div class="loginNudge">Mag-<button id="nudgeLogin">sign in</button> muna para makapag-rate at makapag-comment.</div>`;
-    document.getElementById('nudgeLogin').addEventListener('click', ()=> openAuthModal('signin'));
-    msg.textContent = 'I-tap ang bituin para mag-rate (kailangan mag-sign in).';
+    formWrap.innerHTML = `<div class="loginNudge">${t('loginNudge')}</div>`;
+    const nudgeBtn = formWrap.querySelector('button');
+    if(nudgeBtn) nudgeBtn.addEventListener('click', ()=> openAuthModal('signin'));
+    msg.textContent = t('ratingMsgNeedLogin');
   }else{
     formWrap.innerHTML = `
-      <textarea id="reviewText" placeholder="Isulat ang iyong karanasan dito... (optional)"></textarea>
-      <button id="submitReviewBtn">I-post ang Review</button>`;
+      <textarea id="reviewText" placeholder="${escapeHTML(t('reviewTextPh'))}"></textarea>
+      <button id="submitReviewBtn">${t('submitReviewBtn')}</button>`;
     document.getElementById('submitReviewBtn').addEventListener('click', ()=> submitReview(placeId));
-    msg.textContent = 'I-tap ang bituin para mag-rate.';
+    msg.textContent = t('ratingMsgDefault');
   }
 }
 
 async function submitReview(placeId){
   const msg = document.getElementById('ratingMsg');
   if(!currentUser){ openAuthModal('signin'); return; }
-  if(selectedRating === 0){ msg.textContent = 'Pumili muna ng bituin bago mag-post.'; return; }
-  if(!firebaseReady){ msg.textContent = 'Hindi pa na-configure ang Firebase.'; return; }
+  if(selectedRating === 0){ msg.textContent = t('ratingMsgNeedStar'); return; }
+  if(!firebaseReady){ msg.textContent = t('ratingMsgNoFirebase'); return; }
 
   const text = document.getElementById('reviewText').value.trim();
   try{
@@ -1118,12 +1459,12 @@ async function submitReview(placeId){
       comment: text,
       createdAt: serverTimestamp()
     });
-    msg.textContent = 'Salamat sa iyong review!';
+    msg.textContent = t('ratingMsgThanks');
     document.getElementById('reviewText').value = '';
     selectedRating = 0;
     [...document.getElementById('ratingStars').children].forEach(b=>b.classList.remove('filled'));
   }catch(e){
-    msg.textContent = 'May error, subukan ulit.';
+    msg.textContent = t('ratingMsgError');
     console.error(e);
   }
 }
@@ -1138,7 +1479,7 @@ function loadReviews(placeId){
   if(!firebaseReady){
     avgNum.textContent = '0.0';
     avgStars.innerHTML = '';
-    countTxt.textContent = 'Setup mo muna ang Firebase config sa code para gumana ang reviews.';
+    countTxt.textContent = t('firebaseNotSetup');
     list.innerHTML = '';
     return;
   }
@@ -1156,8 +1497,8 @@ function loadReviews(placeId){
     if(reviews.length===0){
       avgNum.textContent = '0.0';
       avgStars.innerHTML = starsHTML(0);
-      countTxt.textContent = 'Wala pang review — ikaw ang maging una!';
-      list.innerHTML = '<div class="review-empty">Wala pang review dito.</div>';
+      countTxt.textContent = t('noReviewsCountBig');
+      list.innerHTML = `<div class="review-empty">${t('reviewEmpty')}</div>`;
       return;
     }
 
@@ -1165,10 +1506,11 @@ function loadReviews(placeId){
     const avg = sum/reviews.length;
     avgNum.textContent = avg.toFixed(1);
     avgStars.innerHTML = starsHTML(avg);
-    countTxt.textContent = `${reviews.length} na tao ang nag-rate`;
+    countTxt.textContent = t('reviewsCountTxt', reviews.length);
 
+    const localeTag = currentLang === 'tl' ? 'en-PH' : 'en-US';
     list.innerHTML = reviews.map(r=>{
-      const date = r.createdAt && r.createdAt.toDate ? r.createdAt.toDate().toLocaleDateString('en-PH', {month:'short', day:'numeric', year:'numeric'}) : '';
+      const date = r.createdAt && r.createdAt.toDate ? r.createdAt.toDate().toLocaleDateString(localeTag, {month:'short', day:'numeric', year:'numeric'}) : '';
       return `
         <div class="review-item">
           <div class="rhead">
@@ -1187,6 +1529,9 @@ function escapeHTML(str){
   d.textContent = str;
   return d.innerHTML;
 }
+
+/* ===================== INITIAL RENDER ===================== */
+applyStaticTranslations();
 </script> 
 </body>
 </html>
